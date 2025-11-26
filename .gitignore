@@ -1,1 +1,42 @@
-*.tfvars
+# --- IDE ---
+.vscode/
+.idea/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Terraform ---
+# LOCAL STATE (Critical to ignore)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.log.*
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+*.plan
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment Variables (CRITICAL SECURITY)
+.env
+
+# --- Certificates / Keys ---
+*.pem
+*.key
+*.crt

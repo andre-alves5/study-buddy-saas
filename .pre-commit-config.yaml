@@ -17,4 +17,6 @@ repos:
     rev: 3.2.50
     hooks:
       - id: checkov
-        args: ['--directory', 'terraform', '--framework', 'terraform']
+        args: ['--directory', 'terraform', '--framework', 'terraform', '--config-file', '.checkov.yaml']
+        exclude: \.terraform/
+        files: \.tf$|\.yaml$|\.yml$|\.json$
