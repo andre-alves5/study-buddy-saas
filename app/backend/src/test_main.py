@@ -1,14 +1,21 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
-from main import app
+import main
 import jwt
+import importlib
 
-client = TestClient(app)
+client = TestClient(main.app)
 
 
 @patch("main.boto3")
 @patch("jwt.decode")
-def test_generate_upload_url_success(mock_jwt_decode, mock_boto3):
+def test_generate_upload_url_success(mock_jwt_decode, mock_boto3, monkeypatch):
+    # Set environment variables
+    monkeypatch.setenv("S3_BUCKET", "test-bucket")
+    monkeypatch.setenv("SQS_QUEUE_URL", "test-queue")
+    monkeypatch.setenv("DYNAMODB_TABLE", "test-table")
+    importlib.reload(main)
+
     # Mock JWT decode to return a user_id
     mock_jwt_decode.return_value = {"sub": "test-user"}
 
