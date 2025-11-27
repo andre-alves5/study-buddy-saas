@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import App from './src/App';
+import App from './App';
 
 jest.mock('@aws-amplify/ui-react', () => ({
   Authenticator: ({ children }) => children({ signOut: jest.fn(), user: { username: 'test-user' } }),
