@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Header, Depends
 from pydantic import BaseModel
-from jose import jwt
+import jwt
 import boto3
 import os
 import uuid

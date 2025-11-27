@@ -1,15 +1,16 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 from main import app
+import jwt
 
 client = TestClient(app)
 
 
 @patch("main.boto3")
-@patch("main.jwt")
-def test_generate_upload_url_success(mock_jwt, mock_boto3):
+@patch("jwt.decode")
+def test_generate_upload_url_success(mock_jwt_decode, mock_boto3):
     # Mock JWT decode to return a user_id
-    mock_jwt.decode.return_value = {"sub": "test-user"}
+    mock_jwt_decode.return_value = {"sub": "test-user"}
 
     # Mock S3, SQS, and DynamoDB clients
     mock_s3_client = MagicMock()
@@ -38,7 +39,7 @@ def test_generate_upload_url_success(mock_jwt, mock_boto3):
     assert response.json()["upload_url"] == "http://s3-presigned-url"
 
     # Verify that the correct calls were made
-    mock_jwt.decode.assert_called_once()
+    mock_jwt_decode.assert_called_once()
     mock_s3_client.generate_presigned_url.assert_called_once()
     mock_table.put_item.assert_called_once()
     mock_sqs_client.send_message.assert_called_once()
@@ -50,9 +51,9 @@ def test_generate_upload_url_no_auth():
     assert response.json() == {"detail": "Authorization header missing"}
 
 
-@patch("main.jwt")
-def test_generate_upload_url_invalid_token(mock_jwt):
-    mock_jwt.decode.side_effect = Exception("Invalid token")
+@patch("jwt.decode")
+def test_generate_upload_url_invalid_token(mock_jwt_decode):
+    mock_jwt_decode.side_effect = Exception("Invalid token")
 
     response = client.post(
         "/upload",
