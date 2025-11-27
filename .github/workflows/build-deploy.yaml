@@ -25,8 +25,7 @@ jobs:
       - name: Install Python dependencies for backend and worker
         if: matrix.service == 'backend' || matrix.service == 'worker'
         run: |
-          pip install -r app/${{ matrix.service }}/src/requirements.txt
-          pip install -r app/${{ matrix.service }}/src/requirements-dev.txt
+          pip install -r app/${{ matrix.service }}/src/requirements.txt -r app/${{ matrix.service }}/src/requirements-dev.txt
 
       - name: Run Python tests
         if: matrix.service == 'backend' || matrix.service == 'worker'
