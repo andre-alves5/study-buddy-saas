@@ -22,6 +22,10 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Uninstall conflicting crypto libraries
+        if: matrix.service == 'backend' || matrix.service == 'worker'
+        run: pip uninstall -y pycrypto crypto
+
       - name: Install Python dependencies for backend and worker
         if: matrix.service == 'backend' || matrix.service == 'worker'
         run: |
