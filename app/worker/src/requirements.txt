@@ -1,2 +1,2 @@
 boto3
-urllib3==2.2.1
+urllib3==2.5.0
