@@ -1,5 +1,5 @@
-fastapi
-uvicorn
-boto3
-PyJWT
-cryptography
+fastapi==0.122.0
+uvicorn==0.38.0
+boto3==1.41.5
+PyJWT==2.10.1
+cryptography==46.0.3
