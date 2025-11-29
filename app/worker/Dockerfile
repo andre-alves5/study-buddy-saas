@@ -1,6 +1,9 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-alpine
 
+# Upgrade busybox to patch vulnerabilities
+RUN apk upgrade --no-cache busybox
+
 # Set the working directory in the container
 WORKDIR /app
 
