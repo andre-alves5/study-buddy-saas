@@ -87,3 +87,7 @@ jobs:
       - name: Snyk Scan
         uses: snyk/actions/docker@master
         with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ env.VERSION }}
+          args: --file=app/${{ matrix.service }}/Dockerfile
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
