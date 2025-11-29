@@ -8,6 +8,9 @@ RUN npm run build
 
 # --- Stage 2: Serve (Nginx) ---
 FROM nginx:alpine
+# Upgrade packages to patch vulnerabilities
+RUN apk upgrade --no-cache libpng busybox
+
 # Copy build artifacts to Nginx web root
 COPY --from=builder /app/dist /usr/share/nginx/html
 
