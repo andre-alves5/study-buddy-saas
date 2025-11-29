@@ -8,9 +8,11 @@ import time
 import json
 
 app = FastAPI()
-s3 = boto3.client("s3")
-sqs = boto3.client("sqs")
-dynamodb = boto3.resource("dynamodb")
+
+AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+s3 = boto3.client("s3", region_name=AWS_REGION)
+sqs = boto3.client("sqs", region_name=AWS_REGION)
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 
 BUCKET = os.getenv("S3_BUCKET")
 QUEUE_URL = os.getenv("SQS_QUEUE_URL")

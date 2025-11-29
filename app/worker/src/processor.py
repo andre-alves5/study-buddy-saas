@@ -3,11 +3,12 @@ import os
 import json
 import time
 
-sqs = boto3.client("sqs")
-s3 = boto3.client("s3")
-dynamodb = boto3.resource("dynamodb")
-bedrock = boto3.client("bedrock-runtime")
-polly = boto3.client("polly")
+AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+sqs = boto3.client("sqs", region_name=AWS_REGION)
+s3 = boto3.client("s3", region_name=AWS_REGION)
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+bedrock = boto3.client("bedrock-runtime", region_name=AWS_REGION)
+polly = boto3.client("polly", region_name=AWS_REGION)
 
 QUEUE_URL = os.getenv("SQS_QUEUE_URL")
 BUCKET = os.getenv("S3_BUCKET")
