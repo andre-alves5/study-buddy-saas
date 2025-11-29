@@ -56,24 +56,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Read version
+        id: version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push
+      - name: Build and Push Versioned Image
         id: build_and_push
         uses: docker/build-push-action@v5
         with:
           context: ./app/${{ matrix.service }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ env.VERSION }}
 
       - name: Snyk Scan
         uses: snyk/actions/docker@master
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ github.sha }}
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ env.VERSION }}
           args: --file=app/${{ matrix.service }}/Dockerfile
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Tag and Push Latest
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/study-buddy-${{ matrix.service }}:latest
